@@ -1,0 +1,20 @@
+<snippet>
+	<content><![CDATA[
+
+lli sqrt_num(lli x) {
+    lli l = 1, r = INF;
+    while (r - l > 1) {
+        lli m = (l + r) / 2;
+        if (m * m <= x)
+            l = m;
+        else
+            r = m;
+    }
+    return l;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	 <tabTrigger>sqrt</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

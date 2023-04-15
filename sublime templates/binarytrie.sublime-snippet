@@ -1,0 +1,134 @@
+<snippet>
+	<content><![CDATA[
+struct node 
+{
+	int data;
+	struct node *left ,*right;
+} *headnode;
+
+struct node *newnode()
+{
+	struct node *n = (struct node *)malloc(sizeof(struct node));
+	n->data = 0;
+	n->left = NULL;
+	n->right = NULL;
+	return n;
+}
+
+
+void insertdata(lli x)
+{
+	bitset<32> num = bitset<32>(x);
+	
+	struct node *curnode = headnode;
+
+	for(int i = 31 ; i >= 0 ; i --)
+	{
+		curnode->data++;
+		if(num[i] == 0)
+		{
+			if(curnode->left == NULL)
+			{
+				curnode->left = newnode();
+			}
+			curnode = curnode->left;
+		}
+		else
+		{	
+			if(curnode->right == NULL)
+			{
+				curnode->right = newnode();
+			}
+			curnode = curnode->right;
+		}
+	}
+	curnode->data++;
+}
+
+void deletedata(lli x)
+{
+	bitset<32> num = bitset<32>(x);
+	
+	struct node *curnode = headnode;
+
+	for(int i = 31 ; i >= 0 ; i --)
+	{
+		curnode->data--;
+		if(num[i] == 0)
+		{
+			curnode = curnode->left;
+		}
+		else
+		{	
+			curnode = curnode->right;
+		}
+	}
+	curnode->data--;
+}
+
+void printdata(struct node *curnode , string s , int p)
+{
+	if(p == 0)
+	{
+		cout << s << endl;
+		return ;
+	}
+	if(curnode == NULL)
+	{
+		return;
+	};
+
+	if(curnode->left != NULL && curnode->left->data != 0 )
+		printdata(curnode->left , s + "0" , p-1);
+	
+	if(curnode->right != NULL && curnode->right->data != 0)
+		printdata(curnode->right, s + "1" , p-1);
+
+}
+
+bitset<32> searchdata(bitset<32> num)
+{
+	struct node *curnode = headnode;
+
+	bitset<32> ans;
+
+	for(int i = 31 ; i >= 0 ; i --)
+	{
+		if(num[i] == 0)
+		{
+			if(curnode->left == NULL || curnode->left->data == 0)
+			{
+				curnode = curnode->right;
+				ans[i] = 1;
+			}
+			else
+			{
+				curnode = curnode->left;
+				ans[i] = 0;
+			}
+		}
+		else
+		{	
+			if(curnode->right == NULL || curnode->right->data == 0)
+			{
+				curnode = curnode->left;
+				ans[i] = 0;
+			}
+			else
+			{
+				curnode = curnode->right;
+				ans[i] = 1;
+			}
+		}
+	}
+
+	return ans;
+
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>binarytrie</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

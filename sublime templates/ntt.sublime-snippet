@@ -1,0 +1,110 @@
+<snippet>
+	<content><![CDATA[
+
+int mod = 998244353;
+int G = 3;
+using cd = complex < double > ;
+const double PI = acos(-1);
+
+lli power(lli x, lli n , lli mod)   //x base n exponent
+{
+    if(n==0) return 1;
+    if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
+    n = n%(mod-1);
+    lli pow = 1;
+    while (n)
+    {
+        if (n & 1)
+            pow = (pow*x)%mod;
+        n = n >> 1;
+        x = (x*x)%mod;
+    }
+    return pow;
+}
+
+lli imod(lli n , lli mod)
+{
+    if(n == 1) return 1;
+    return (mod - (lli)(mod/n) * imod(mod%n , mod) % mod) % mod;
+}
+
+
+void fft(vector < cd > & a, bool invert) {
+  lli n = a.size();
+  for (lli i = 1, j = 0; i < n; i++) {
+    lli bit = n >> 1;
+    for (; j & bit; bit >>= 1)
+      j ^= bit;
+    j ^= bit;
+
+    if (i < j)
+      swap(a[i], a[j]);
+  }
+  for (lli len = 2; len <= n; len <<= 1) {
+    double ang = 2 * PI / len * (invert ? -1 : 1);
+    cd wlen(cos(ang), sin(ang));
+    for (lli i = 0; i < n; i += len) {
+      cd w(1);
+      for (lli j = 0; j < len / 2; j++) {
+        cd u = a[i + j], v = a[i + j + len / 2] * w;
+        a[i + j] = u + v;
+        a[i + j + len / 2] = u - v;
+        w *= wlen;
+      }
+    }
+  }
+  if (invert) {
+    for (cd & x: a)
+      x /= n;
+  }
+}
+void NTT(vector < lli > & a, lli len, lli opt, vector < lli > & rev) {
+  for (lli i = 0; i < len; i++)
+    if (i < rev[i])
+      swap(a[i], a[rev[i]]);
+  for (lli i = 1; i < len; i <<= 1) {
+    lli wn = power(G, (opt * ((mod - 1) / (i << 1)) + mod - 1) % (mod - 1), mod);
+    lli step = i << 1;
+    for (lli j = 0; j < len; j += step) {
+      lli w = 1;
+      for (lli k = 0; k < i; k++, w = (1ll * w * wn) % mod) {
+        lli x = a[j + k];
+        lli y = 1ll * w * a[j + k + i] % mod;
+        a[j + k] = (x + y) % mod;
+        a[j + k + i] = (x - y + mod) % mod;
+      }
+    }
+  }
+  if (opt == -1) {
+    lli r = imod(len, mod);
+    for (lli i = 0; i < len; i++)
+      a[i] = 1ll * a[i] * r % mod;
+  }
+}
+vector < lli > multiply(vector < lli > & a, vector < lli > & b) {
+
+
+  lli n = a.size() - 1, m = b.size() - 1;
+  lli tot = m + n;
+  lli l = 0, len = 1;
+  while (len <= tot) {
+    len <<= 1;
+    l++;
+  }
+  a.resize(len), b.resize(len);
+  vector < lli > rev(len, 0), res(len, 0);
+  for (lli i = 0; i < len; i++)
+    rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (l - 1));
+  NTT(a, len, 1, rev); NTT(b, len, 1, rev);
+  for (lli i = 0; i < len; i++)
+    res[i] = (lli)(a[i] * b[i]) % mod;
+  NTT(res, len, -1, rev);
+  res.resize(tot + 1);
+  return res;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>ntt</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

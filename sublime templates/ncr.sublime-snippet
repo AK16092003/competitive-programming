@@ -1,0 +1,47 @@
+<snippet>
+	<content><![CDATA[
+
+lli mod = 998244353;
+int sz = 200005;
+lli fact[200005];
+void factorial()
+{
+	fact[0] = 1;
+	fact[1] = 1;
+	for(int i = 2 ; i < sz ; i ++)
+	{
+		fact[i] = (fact[i-1]*i)%mod;		
+	}
+}
+lli power(lli x, lli n)   //x base n exponent
+{
+    if(n==0) return 1;
+    if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
+    n = n%(mod-1);
+    lli pow = 1;
+    while (n)
+    {
+        if (n & 1)
+            pow = (pow*x)%mod;
+        n = n >> 1;
+        x = (x*x)%mod;
+    }
+    return pow;
+}
+
+lli inv_mod(lli x)
+{
+	return power(x , mod - 2)%mod;
+}
+lli ncr(lli n , lli r)
+{
+	if(n<r || r<0) return 0;
+	if(r == 0) return 1;
+	return (((fact[n]*inv_mod(fact[n-r]))%mod)*inv_mod(fact[r])%mod)%mod;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>ncr</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,21 @@
+<snippet>
+	<content><![CDATA[
+int sz = 1000005;
+lli fact[1000005];
+void factorial()
+{
+	fact[0] = 1;
+	fact[1] = 1;
+	for(int i = 2 ; i < sz ; i ++)
+	{
+		fact[i] = (fact[i-1]*i)%mod;		
+	}
+}
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>fact</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,52 @@
+<snippet>
+	<content><![CDATA[
+
+int n;
+string s , s1;
+lli p = 31;
+lli mod = 1e9+7;
+vl hashnormal , hashreverse;
+lli power[2000005];
+
+
+vl calchash(string s)
+{
+	int n = s.length();
+	vl ans(n);
+	for(int i = 0 ; i < n ; i ++) ans[i] = 0;
+
+	ans[0] = (s[0] - 'a' + 1);
+	for(int i = 1 ; i < n ; i ++)
+	{
+		ans[i] = ((p*ans[i-1]) + (s[i] - 'a' + 1))%mod;
+	}
+	return ans;
+}
+
+lli hashval(lli l , lli r)
+{
+	lli len = r - l + 1;
+	if(len <= 0) return 0;
+	lli ans = (hashnormal[r]);
+	if(l >= 1) ans -= (hashnormal[l-1]*power[len])%mod;
+	if(ans<0) ans += mod;
+	return ans;
+}
+
+lli hashval_rev(lli l , lli r)
+{
+	lli len = r - l + 1;
+	if(len <= 0) return 0;
+
+	lli ans = (hashreverse[r]);
+	if(l >= 1) ans -= (hashreverse[l-1]*power[len])%mod;
+	if(ans<0) ans += mod;
+	return ans;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>hashing</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

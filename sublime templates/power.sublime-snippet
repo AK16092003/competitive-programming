@@ -1,0 +1,30 @@
+<snippet>
+	<content><![CDATA[
+
+lli power(lli x, lli n , lli mod)   //x base n exponent
+{
+    if(n==0) return 1;
+    if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
+    n = n%(mod-1);
+    lli pow = 1;
+    while (n)
+    {
+        if (n & 1)
+            pow = (pow*x)%mod;
+        n = n >> 1;
+        x = (x*x)%mod;
+    }
+    return pow;
+}
+lli imod(lli n , lli mod)
+{
+    if(n == 1) return 1;
+    return (mod - (lli)(mod/n) * imod(mod%n , mod) % mod) % mod;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>power</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,59 @@
+<snippet>
+	<content><![CDATA[
+struct segtree
+{
+	int size;
+	vl sums;
+	lli defval = 0;
+
+	void init(int n)
+	{
+		size = 1;
+		while(size < n) size*=2;
+		sums.assign(2*size , defval);
+	}
+
+	void set(int i , lli v , int x , int  lx , int rx)
+	{
+		if(rx  - lx == 1)
+		{
+			sums[x] = v;
+			return;
+		}
+
+		int m = (lx + rx)/2;
+		if( i < m)
+		{
+			set(i , v , 2*x + 1 , lx , m);
+		}
+		else
+		{
+			set(i , v , 2*x + 2 , m , rx);
+		}
+		sums[x] = sums[2*x+1] + sums[2*x+2];
+
+	}
+	void set(int i , lli v)
+	{
+		set(i , v, 0 , 0 , size);
+	}
+	lli sum(int l , int r , int x , int lx , int rx)
+	{
+		if(lx >= r || l >= rx) return defval;
+		if(l <= lx && r >= rx) return sums[x];
+		int m = (lx + rx)/2;
+		lli s1 = sum(l , r , 2*x+1 , lx , m);
+		lli s2 = sum(l , r , 2*x+2 , m , rx);
+		return s1 + s2;
+	}
+	lli sum(int l , int r)
+	{
+		return sum(l , r , 0 , 0 , size);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segtree</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

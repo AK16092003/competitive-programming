@@ -1,0 +1,49 @@
+<snippet>
+	<content><![CDATA[
+		lli count_coprime(int a , int n)
+{
+	// count of numbers from 1 to n coprime to a
+	vector<lli> fact;
+	lli cur = 2;
+
+	while(cur*cur <= a)
+	{
+		if(a%cur == 0)
+		{
+			fact.pb(cur);
+		}
+
+		while(a%cur == 0) a = a/cur;
+		if(cur&1)cur++;
+		cur++;
+	}
+	if(a!=1)fact.pb(a);
+
+
+	lli n1 = fact.size();
+	lli ans = n;
+	for(int i = 1; i < (1<<n1) ; i ++)
+	{
+		lli pro = 1;
+		lli count = 0;
+		for(int j = 0 ; j < n1 ; j ++)
+		{
+			if(i&(1 << j))
+			{
+				pro = pro*fact[j];
+				count++;
+			}
+		}
+		ans += ((count%2==0)?1ll:-1ll)*(n/pro);
+		ans = ans%mod;
+
+	}
+	return (ans+mod)%mod;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>count coprime</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
