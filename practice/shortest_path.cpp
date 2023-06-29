@@ -61,6 +61,8 @@ public:
 
             vector<string> copy_grid = grid;
 
+            // all lock cells are unreachable at initial ..
+            
             for(int i = 0 ; i < n ; i ++)
             {
                 for(int j =  0 ; j  < m ; j ++)
