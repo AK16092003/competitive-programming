@@ -61,7 +61,7 @@ public:
 
             vector<string> copy_grid = grid;
 
-            // all lock cells are unreachable at initial ..
+            // all lock cells are unreachable at initial ...
             
             for(int i = 0 ; i < n ; i ++)
             {
@@ -75,7 +75,7 @@ public:
             }
 
 
-            int operation = 0;
+            int operation = 0;  // answer for this permutation 
 
             for(int cur = 0 ; cur < k ; cur++)
             {
@@ -137,13 +137,15 @@ public:
                 }
 
                 // cur key reachable
-                // make lock open
-
+                // remove the lock 
                 copy_grid[pos_x_lock[perm[cur]]][pos_y_lock[perm[cur]]] = '.';
 
+                // update current position (x , y)
                 cur_x = pos_x_key[perm[cur]];
                 cur_y = pos_y_key[perm[cur]];   
             }
+
+            // take minimum operation for all permutations.
             fans = min(fans , operation);
 
         }
