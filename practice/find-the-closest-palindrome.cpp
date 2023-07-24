@@ -48,7 +48,7 @@ public:
 
         lli half = to_lli(to_string(num).substr(0,(k+1)/2));
 
-        // either increment or decrement half , or keep first hals as it is
+        // either increment or decrement half , or keep first half as it is
 
         numbers.push_back(full(half , k));
         numbers.push_back(full(half+1 , k));
