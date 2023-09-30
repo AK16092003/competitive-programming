@@ -1,0 +1,145 @@
+<snippet>
+	<content><![CDATA[
+		
+struct node
+{
+	lli add;
+	lli val;
+};
+ 
+ 
+struct segtree
+{
+	int size;
+	vector<struct node> operations;
+ 
+	struct node defval = {0ll , 0ll};
+		
+ 
+	void init(int n)
+	{
+		size = 1;
+		while(size < n) size*=2;
+		operations.assign(2*size , defval);
+	}
+
+	lli calc(lli x , lli y)
+	{
+		return x + y;
+	}
+ 
+	struct node apply_operation(struct node x , struct node y)
+	{
+		struct node res = x;
+		// y is parent , res is child
+
+
+		return res;
+	}
+ 
+	void propagation(int x , int lx , int rx)
+	{
+		if(rx - lx == 1) 
+		{
+			// relax all lazy operations
+			return;
+		}
+		else
+		{
+			operations[2*x+1] = apply_operation(operations[2*x+1] , operations[x]);
+			operations[2*x+2] = apply_operation(operations[2*x+2] , operations[x]);
+			
+			// relax all lazy operations
+
+
+		}
+	}
+ 
+	struct node get(int i , int x , int lx , int rx)
+	{
+		propagation(x , lx , rx);
+		if(rx - lx == 1)
+		{
+			return operations[x];
+		}
+		int m = (lx + rx)/2;
+ 
+		struct node res;
+ 
+		if(i < m)
+		{
+			res =  get(i,2*x+1 , lx , m);
+		}
+		else{
+			res =  get(i,2*x+2 , m , rx);
+		}
+ 
+		return res;
+	}
+ 
+	lli get(int i)
+	{
+		struct node ans = get( i , 0 , 0 , size);
+		return ans.val;
+	}
+ 
+	void range_update(int l , int r ,lli v, int x , int lx , int rx)
+	{
+		if(lx >= r || l >= rx) return ;
+		propagation(x , lx , rx);
+ 
+		if(l <= lx && r >= rx)
+		{
+			operations[x].add += v;
+			propagation(x , lx , rx);
+			return;
+		}
+ 
+		int m = (lx + rx)/2;
+		range_update(l , r , v , 2*x+1 , lx , m);
+		range_update(l , r , v , 2*x+2 , m , rx);
+ 
+		propagation(2*x+1 , lx , m);
+		propagation(2*x+2 , m , rx);
+
+		operations[x].val = calc(operations[2*x+1].val , operations[2*x+2].val);
+ 
+	}
+	void range_update(int l , int r , lli v)
+	{
+		range_update(l , r  , v, 0 , 0 , size);
+	}
+ 
+	lli range_calc(int l , int r , int x , int lx , int rx)
+	{
+		propagation(x , lx , rx);
+		if(lx >= r || l >= rx) return LLONG_MAX;
+ 
+		if(l <= lx && r >= rx)
+		{
+			return operations[x].val;
+		}
+ 
+		int m = (lx + rx)/2;
+		// calculate
+
+		propagation(2*x+1 , lx , m);
+		propagation(2*x+2 , m , rx);
+
+		operations[x].val = calc(operations[2*x+1].val , operations[2*x+2].val);
+
+		return calc(range_calc(l , r , 2*x+1 , lx , m) , range_calc(l , r , 2*x+2 , m , rx));
+	}
+ 
+	lli range_calc(int l , int r)
+	{
+		return range_calc(l , r , 0 , 0 , size);
+	}
+ 
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segtreelazy</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

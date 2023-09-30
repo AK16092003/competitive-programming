@@ -1,48 +1,56 @@
 <snippet>
 	<content><![CDATA[
 
+
+#define SZ 1000005
+
 int n;
-string s , s1;
-lli p = 31;
+string s;
+pll p = {31,53};
+pll inv_p = {129032259 , 56603774};
+pll inv_p_1 = {233333335 , 788461544};
 lli mod = 1e9+7;
-vl hashnormal , hashreverse;
-lli power[2000005];
+vpll hash_array(SZ);
+pll powerval[SZ];
 
+void calcpow()
+{
+	powerval[0] = {1,1};
+	for(int i = 1 ; i < SZ ; i ++)
+	{
+		powerval[i].first = (p.first*powerval[i-1].first)%mod;
+		powerval[i].second = (p.second*powerval[i-1].second)%mod;
+	}
+}
 
-vl calchash(string s)
+vpll calchash(string &s)
 {
 	int n = s.length();
-	vl ans(n);
-	for(int i = 0 ; i < n ; i ++) ans[i] = 0;
-
-	ans[0] = (s[0] - 'a' + 1);
+	for(int i = 0 ; i < n ; i ++) hash_array[i] = {0,0};
+	hash_array[0] = {(s[0] - 'a' + 1) , (s[0] - 'a' + 1)};
 	for(int i = 1 ; i < n ; i ++)
 	{
-		ans[i] = ((p*ans[i-1]) + (s[i] - 'a' + 1))%mod;
+		hash_array[i].first = ((p.first*hash_array[i-1].first) + (s[i] - 'a' + 1))%mod;
+		hash_array[i].second = ((p.second*hash_array[i-1].second) + (s[i] - 'a' + 1))%mod;
 	}
-	return ans;
+	return hash_array;
 }
 
-lli hashval(lli l , lli r)
+pll hashval(lli l , lli r)
 {
 	lli len = r - l + 1;
-	if(len <= 0) return 0;
-	lli ans = (hashnormal[r]);
-	if(l >= 1) ans -= (hashnormal[l-1]*power[len])%mod;
-	if(ans<0) ans += mod;
+	if(len <= 0 || l < 0 || r >= n || r<l) return {0,0};
+	pll ans = hash_array[r];
+	if(l >= 1)
+	{
+		ans.first -= (hash_array[l-1].first*powerval[len].first)%mod;
+		ans.second -= (hash_array[l-1].second*powerval[len].second)%mod;
+	}
+	if(ans.first<0) ans.first += mod;
+	if(ans.second<0) ans.second += mod;
 	return ans;
 }
 
-lli hashval_rev(lli l , lli r)
-{
-	lli len = r - l + 1;
-	if(len <= 0) return 0;
-
-	lli ans = (hashreverse[r]);
-	if(l >= 1) ans -= (hashreverse[l-1]*power[len])%mod;
-	if(ans<0) ans += mod;
-	return ans;
-}
 
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->

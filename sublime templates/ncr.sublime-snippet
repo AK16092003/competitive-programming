@@ -1,21 +1,15 @@
 <snippet>
 	<content><![CDATA[
-
-lli mod = 998244353;
-int sz = 200005;
-lli fact[200005];
-void factorial()
-{
-	fact[0] = 1;
-	fact[1] = 1;
-	for(int i = 2 ; i < sz ; i ++)
-	{
-		fact[i] = (fact[i-1]*i)%mod;		
-	}
-}
+lli mod = 1e9 + 7;
+int sz = 1000005;
+lli fact[1000005];
+lli ifact[1000005];
+ 
+ 
 lli power(lli x, lli n)   //x base n exponent
 {
     if(n==0) return 1;
+    x = x%mod;
     if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
     n = n%(mod-1);
     lli pow = 1;
@@ -28,17 +22,38 @@ lli power(lli x, lli n)   //x base n exponent
     }
     return pow;
 }
-
+ 
 lli inv_mod(lli x)
 {
 	return power(x , mod - 2)%mod;
 }
+ 
+void factorial()
+{
+	fact[0] = 1;
+	fact[1] = 1;
+	ifact[0] = 1;
+	ifact[1] = 1;
+	
+	for(int i = 2 ; i < sz ; i ++)
+	{
+		fact[i] = (fact[i-1]*i)%mod;	
+	}
+	ifact[sz-1] = inv_mod(fact[sz-1]);
+ 
+	for(int i = sz-2 ; i > 0 ; i --)
+	{
+		ifact[i] = (ifact[i+1]*(i+1))%mod;
+	}
+}
+ 
 lli ncr(lli n , lli r)
 {
 	if(n<r || r<0) return 0;
 	if(r == 0) return 1;
-	return (((fact[n]*inv_mod(fact[n-r]))%mod)*inv_mod(fact[r])%mod)%mod;
+	return (((fact[n]*ifact[n-r])%mod)*ifact[r])%mod;
 }
+ 
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>ncr</tabTrigger>

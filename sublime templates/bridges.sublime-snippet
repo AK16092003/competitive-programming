@@ -1,0 +1,38 @@
+<snippet>
+	<content><![CDATA[
+
+int Counter = 1;
+
+int dfs(int u , int p)
+{
+	low[u] = disc[u] = Counter++;
+	int child = 0;
+	for(int v : adjlst[u])
+	{
+		if(v!=p)
+		{
+			if(!disc[v])
+			{
+				child++;
+				dfs(v , u);
+				if(disc[u] < low[v])
+				{
+					ans.pb({u , v});
+				}
+				low[u] = min(low[u] , low[v]);
+			}
+			else
+			{
+				low[u] = min(low[u] , disc[v]);
+			}
+		}
+	}
+	return child;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>bridges</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

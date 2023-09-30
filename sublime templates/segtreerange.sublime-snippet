@@ -1,149 +1,60 @@
 <snippet>
 	<content><![CDATA[
 
-struct node
-{
-	lli assign_op;
-	lli val;
-};
-
-
 struct segtree
 {
 	int size;
-	vector<struct node> operations;
-	lli NO_OP = -1;
-	struct node defval = {NO_OP , 0ll};
-		
+	vl sums;
+	lli defval = 0;
 
 	void init(int n)
 	{
 		size = 1;
 		while(size < n) size*=2;
-		operations.assign(2*size , defval);
+		sums.assign(2*size , defval);
 	}
 
-	struct node apply_operation(struct node x , struct node y)
+	int get(int i , int x , int  lx , int rx)
 	{
-		struct node res;
-		res.val = x.val;
-		res.assign_op = ((y.assign_op == NO_OP)?(x.assign_op):(y.assign_op));
-		return res;
-	}
 
-	void propagation(int x , int lx , int rx)
-	{
-		if(rx - lx == 1) 
+		if(rx  - lx == 1)
 		{
-			if(operations[x].assign_op != NO_OP)
-				operations[x].val = (rx - lx)*operations[x].assign_op;
-			operations[x].assign_op =  NO_OP;
-			return;
+			return sums[x];
+		}
+
+		int m = (lx + rx)/2;
+		int ans = sums[x];
+		if( i < m)
+		{
+			ans += get(i , 2*x + 1 , lx , m);
 		}
 		else
 		{
-			operations[2*x+1] = apply_operation(operations[2*x+1] , operations[x]);
-			operations[2*x+2] = apply_operation(operations[2*x+2] , operations[x]);
-			if(operations[x].assign_op != NO_OP)
-				operations[x].val = (rx - lx)*operations[x].assign_op;
-			operations[x].assign_op = NO_OP;
+			ans += get(i , 2*x + 2 , m , rx);
 		}
+		return ans;
 	}
-
-	struct node get(int i , int x , int lx , int rx)
+	int get(int i)
 	{
-		propagation(x , lx , rx);
-		if(rx - lx == 1)
-		{
-			return operations[x];
-		}
-		int m = (lx + rx)/2;
-
-		struct node res;
-
-		if(i < m)
-		{
-			res =  get(i,2*x+1 , lx , m);
-		}
-		else{
-			res =  get(i,2*x+2 , m , rx);
-		}
-
-		return res;
+		return get(i , 0 , 0 , size);
 	}
-
-	lli get(int i)
-	{
-		struct node ans = get( i , 0 , 0 , size);
-		return (ans.assign_op == NO_OP ? ans.val : ans.assign_op);
-	}
-
-	void assign_op(int l , int r ,lli v, int x , int lx , int rx)
+	void range_set(int l , int r , int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return ;
-		propagation(x , lx , rx);
-
-		if(l <= lx && r >= rx)
+		if(l <= lx && r >= rx) 
 		{
-			operations[x].assign_op = v;
-			propagation(x , lx , rx);
+			sums[x] += 1;
 			return;
 		}
-
 		int m = (lx + rx)/2;
-		assign_op(l , r , v , 2*x+1 , lx , m);
-		assign_op(l , r , v , 2*x+2 , m , rx);
-
-		propagation(2*x+1 , lx , m);
-		propagation(2*x+2 , m , rx);
-
-		operations[x].val = (operations[2*x+1].val + operations[2*x+2].val);
-
+		range_set(l , r , 2*x+1 , lx , m);
+		range_set(l , r , 2*x+2 , m , rx);
 	}
-	void assign_op(int l , int r , lli v)
+	void range_set(int l , int r)
 	{
-		assign_op(l , r  , v, 0 , 0 , size);
+		range_set(l , r , 0 , 0 , size);
 	}
-
-	lli sum(int l , int r , int x , int lx , int rx)
-	{
-		propagation(x , lx , rx);
-
-		if(lx >= r || l >= rx) return 0;
-
-		if(l <= lx && r >= rx)
-		{
-			return operations[x].val;
-		}
-
-		int m = (lx + rx)/2;
-		return sum(l , r , 2*x+1 , lx , m) + sum(l , r , 2*x+2 , m , rx);
-	}
-
-	lli sum(int l , int r)
-	{
-		return sum(l , r , 0 , 0 , size);
-	}
-
-	void recal(int x , int lx , int rx)
-	{
-		int m = (lx + rx)/2;
-		if(rx - lx == 1) return;
-
-		recal(2*x+1 , lx , m);
-		recal(2*x+2 , m  ,rx);
-
-		operations[x].val = operations[2*x+1].val + operations[2*x+2].val;
-
-	}
-	void recal()
-	{
-		recal(0,0,size);
-	}
-
 };
-
-
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>segtreerange</tabTrigger>

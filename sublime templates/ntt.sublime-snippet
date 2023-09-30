@@ -24,8 +24,7 @@ lli power(lli x, lli n , lli mod)   //x base n exponent
 
 lli imod(lli n , lli mod)
 {
-    if(n == 1) return 1;
-    return (mod - (lli)(mod/n) * imod(mod%n , mod) % mod) % mod;
+    return power(n,mod-2,mod) % mod;
 }
 
 
@@ -81,7 +80,7 @@ void NTT(vector < lli > & a, lli len, lli opt, vector < lli > & rev) {
       a[i] = 1ll * a[i] * r % mod;
   }
 }
-vector < lli > multiply(vector < lli > & a, vector < lli > & b) {
+vector < lli > multiply_ntt(vector < lli > & a, vector < lli > & b) {
 
 
   lli n = a.size() - 1, m = b.size() - 1;
@@ -102,6 +101,26 @@ vector < lli > multiply(vector < lli > & a, vector < lli > & b) {
   res.resize(tot + 1);
   return res;
 }
+vector<lli> multiply_fft(vector<lli> const& a, vector<lli> const& b) {
+    vector<cd> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+    lli n = 1;
+    while (n < a.size() + b.size()) 
+        n <<= 1;
+    fa.resize(n);
+    fb.resize(n);
+
+    fft(fa, false);
+    fft(fb, false);
+    for (lli i = 0; i < n; i++)
+        fa[i] *= fb[i];
+    fft(fa, true);
+
+    vector<lli> result(n);
+    for (lli i = 0; i < n; i++)
+        result[i] = round(fa[i].real());
+    return result;
+}
+
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>ntt</tabTrigger>

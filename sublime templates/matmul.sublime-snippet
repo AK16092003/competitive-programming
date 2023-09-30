@@ -7,19 +7,19 @@ struct mat
 	lli mat[sz][sz];
 };
 
-struct mat adjmat;
+struct mat basemat;
 struct mat idenmat;
 struct mat zeromat;
 
 void construct()
 {
-	for(int i =0 ; i < sz ; i ++) for(int j = 0; j < sz ; j ++) adjmat.mat[i][j] = 0;
+	for(int i =0 ; i < sz ; i ++) for(int j = 0; j < sz ; j ++) basemat.mat[i][j] = 0;
 
 	for(int i = 1 ; i <= sz ; i ++)
 	{
 		for(int j = 1 ; j <= sz ; j ++)
 		{
-			adjmat.mat[i-1][j-1] = reached(i , j);
+			basemat.mat[i-1][j-1] = reached(i , j);
 		}
 	}
 	for(int i =0 ; i < sz ; i ++) for(int j = 0; j < sz ; j ++) idenmat.mat[i][j] = (i == j);
@@ -62,8 +62,8 @@ struct mat mul(struct mat a , struct mat b)
 
 struct mat power(struct mat x, lli n)   //x base n exponent
 {
+	if(n<0) return zeromat;
     if(n==0) return idenmat;
-    n = n%(mod-1);
     struct mat pow = idenmat;
     while(n)
     {

@@ -1,0 +1,62 @@
+<snippet>
+	<content><![CDATA[
+
+
+
+vector<int> manacher_odd(string s)
+{
+	int n = s.size();
+	s = "!" + s + "^";
+	vector<int> p(n+2);
+
+	int l = 1 , r = 1;
+	for(int i = 1 ; i <= n ; i ++)
+	{
+		p[i] = max(0 , min(r - i , p[l + (r - i)]));
+		while(s[i - p[i]] == s[i+p[i]])
+		{
+			p[i]++;
+		}
+		if(i + p[i] > r)
+		{
+			r = i + p[i];
+			l = i - p[i];
+		}
+	} 
+
+	return vector<int>(begin(p) + 1 , end(p) - 1);
+}
+
+string t(string s)
+{
+	string xx = "#";
+	for(char x : s)
+	{
+		xx += x;
+		xx += '#';
+	}
+	return xx;
+}
+
+tuple<int , int , int> compute(string &s)
+{
+	vi ans = manacher_odd(t(s));
+	//print(ans);
+	tuple<int ,int,int> maxi =  {-1,-1,-1};
+	for(int i = 0 ; i < ans.size() ; i += 2)
+	{
+		maxi = max(maxi , {2*(ans[i]/2) , (i-ans[i]+2)/2, (i+ans[i]-2)/2});
+	}
+	for(int i = 1 ; i < ans.size() ; i += 2)
+	{
+		maxi = max(maxi , {2*(ans[i]/2)-1 , (i-ans[i]+2)/2, (i+ans[i]-2)/2});
+	}
+	return maxi;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>manacher</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

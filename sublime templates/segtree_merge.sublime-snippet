@@ -1,33 +1,31 @@
 <snippet>
 	<content><![CDATA[
 
+
 struct node
 {
-	int open;
-	int close;
-	int maxi;
+	lli val;
 };
 
 struct segtree
 {
 	int size;
 	vector<struct node> values;
-	struct node empty_node = {0,0,0};
+	// initial here
+	struct node empty_node = {0};
 
 	void init(int n)
 	{
 		size = 1;
 		while(size < n) size*=2;
-		values.assign(2*size , {0,0,0});
+		values.assign(2*size , empty_node);
 	}
 
 	struct node merge(struct node p1 , struct node p2)
 	{
 		struct node merge_node;
-		int t = min(p1.open , p2.close);
-		merge_node.maxi = p1.maxi + p2.maxi + t + t;
-		merge_node.open = p1.open + p2.open - t;
-		merge_node.close = p1.close + p2.close - t;
+		// operation here
+
 		return merge_node;
 	}
 
@@ -35,9 +33,7 @@ struct segtree
 	{
 		if(rx  - lx == 1)
 		{
-			values[x].open = v;
-			values[x].close = 1^v;
-			values[x].maxi = 0;
+			values[x].val = v;
 			return;
 		}
 
@@ -59,21 +55,97 @@ struct segtree
 		set(i , v, 0 , 0 , size);
 	}
 
-	struct node max_seg(int l , int r , int x , int lx , int rx)
+	struct node range_calc(int l , int r , int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return empty_node;
 		if(l <= lx && r >= rx) return values[x];
 		int m = (lx + rx)/2;
 
-		struct node s1 = max_seg(l , r , 2*x+1 , lx , m);
-		struct node s2 = max_seg(l , r , 2*x+2 , m , rx);
+		struct node s1 = range_calc(l , r , 2*x+1 , lx , m);
+		struct node s2 = range_calc(l , r , 2*x+2 , m , rx);
 		
 		return merge(s1 , s2);
 	}
-	lli max_seg(int l , int r)
+	lli range_calc(int l , int r)
 	{
-		return max_seg(l , r , 0 , 0 , size).maxi;
+		return range_calc(l , r , 0 , 0 , size).val;
 	}
+
+
+	vl combine(vl a , vl b)
+	{
+		while(b.size())
+		{
+			a.pb(b[b.size()-1]);
+			b.pop_back();
+		}
+		return a;
+	}
+ 
+	vl find_all_index(int l , int r , lli v , int x , int lx , int rx)
+	{
+		if(lx >= r || l >= rx) return {};
+		
+		int m = (lx + rx)/2;
+		if(values[x].val < v)
+		{
+			return {};
+		}
+ 
+		if(rx - lx == 1)
+		{
+			return {lx};
+		}
+ 
+		return combine(find_all_index(l , r , v ,  2*x+1 , lx , m) , find_all_index(l , r , v , 2*x+2 , m , rx));
+	}
+ 
+	vl find_all_index(int l , int r , lli v)
+	{
+		return find_all_index(l , r ,  v , 0 , 0 , size);
+	}
+ 	
+
+	int find_first_index(int l , int r , lli v , int x , int lx , int rx)
+	{
+		if(lx >= r || l >= rx) return -1;
+		
+		int m = (lx + rx)/2;
+
+		if(rx - lx == 1)
+		{
+			if(values[x].val >= v) return lx;
+			return -1;
+		}
+
+		if(l <= lx && r >= rx)
+		{
+			if(values[2*x+1].val >= v)
+			{
+				return find_first_index(l , r , v ,  2*x+1 , lx , m);
+			}
+			else if(values[2*x+2].val >= v)
+			{
+				return find_first_index(l , r , v ,  2*x+2 , m , rx);
+			}
+			else
+			{
+				return -1;
+			}
+		}
+ 
+		int ans1  = find_first_index(l , r , v ,  2*x+1 , lx , m);
+		if(ans1 != -1) return ans1;	
+		
+		return find_first_index(l , r , v , 2*x+2 , m , rx);
+	}
+ 
+	int find_first_index(int l , int r , lli v)
+	{
+		return find_first_index(l , r ,  v , 0 , 0 , size);
+	}
+
+
 };
 
 ]]></content>

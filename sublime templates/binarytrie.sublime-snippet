@@ -1,5 +1,6 @@
 <snippet>
 	<content><![CDATA[
+
 struct node 
 {
 	int data;
@@ -86,25 +87,24 @@ void printdata(struct node *curnode , string s , int p)
 
 }
 
-bitset<32> searchdata(bitset<32> num)
+lli searchdata(lli num)
 {
 	struct node *curnode = headnode;
 
-	bitset<32> ans;
+	lli ans = 0;
 
 	for(int i = 31 ; i >= 0 ; i --)
 	{
-		if(num[i] == 0)
+		if((num&(1ll << i)) == 0)
 		{
 			if(curnode->left == NULL || curnode->left->data == 0)
 			{
 				curnode = curnode->right;
-				ans[i] = 1;
+				ans |= (1ll  << i );
 			}
 			else
 			{
 				curnode = curnode->left;
-				ans[i] = 0;
 			}
 		}
 		else
@@ -112,12 +112,11 @@ bitset<32> searchdata(bitset<32> num)
 			if(curnode->right == NULL || curnode->right->data == 0)
 			{
 				curnode = curnode->left;
-				ans[i] = 0;
 			}
 			else
 			{
 				curnode = curnode->right;
-				ans[i] = 1;
+				ans |= (1ll  << i );
 			}
 		}
 	}
@@ -125,6 +124,8 @@ bitset<32> searchdata(bitset<32> num)
 	return ans;
 
 }
+
+
 
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->

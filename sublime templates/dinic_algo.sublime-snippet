@@ -1,0 +1,95 @@
+<snippet>
+	<content><![CDATA[
+
+#define MAXLIM 1005
+
+lli maxflow;
+lli adjflow[MAXLIM][MAXLIM];
+int parent[MAXLIM];
+int visited[MAXLIM];
+int n , m;
+
+void addedge(int u , int v , int c)
+{
+	adjflow[u][v] += c;
+}
+
+int start = 0 , stop = 0;
+
+bool reachable()
+{
+	for(int i = start ; i <= stop ; i ++) visited[i] = 0;
+	for(int i = start ; i <= stop ; i ++) parent[i] = -1;
+
+	queue<int> q;
+	q.push(start);
+	visited[start] = 1;
+
+	while(q.size())
+	{
+		int u = q.front();
+		q.pop();
+
+		for(int j = start ; j <= stop ; j ++)
+		{
+			if(adjflow[u][j] && !visited[j])
+			{
+				visited[j] = 1;
+				q.push(j);
+				parent[j] = u;
+			}
+		}
+	}
+
+	return visited[stop];
+}
+
+void dinic(){
+
+	maxflow = 0;
+
+ 	while(reachable())
+ 	{
+
+ 		int minfreeflow = INT_MAX;
+ 		for(int v = stop ; v != start; v = parent[v])
+ 		{
+ 			int u = parent[v];
+ 			minfreeflow = min(minfreeflow , adjflow[u][v]);
+ 		}
+
+ 		maxflow += minfreeflow;
+
+ 		for(int v = stop ; v != start; v = parent[v])
+ 		{
+ 			int u = parent[v];
+ 			adjflow[u][v] -=  minfreeflow;
+ 			adjflow[v][u] +=  minfreeflow;
+ 		}
+ 	}
+}
+
+
+void initialize()
+{
+	start = 0;
+	stop = n-1;
+
+	for(int i = start ; i <= stop ; i ++)
+	{
+		for(int j = start ; j <= stop; j ++)
+		{
+			adjflow[i][j] = 0;
+		}
+		parent[i] = -1;
+	}
+}
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	
+	<tabTrigger>dinic</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

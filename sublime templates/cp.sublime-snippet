@@ -15,6 +15,7 @@ typedef vector<ld> vld;
 typedef vector<pair<lli , lli>> vpll;
 typedef vector<pair<ld , ld>> vplld;
 typedef pair<int,int> pii;
+typedef vector<pair<int,int>> vpii;
 typedef vector<lli> vl;
 typedef pair<lli,lli> pll;
 typedef priority_queue<lli> pq;
@@ -27,7 +28,7 @@ typedef priority_queue<pair<lli,lli>> pqp;
 
 #define print(a) for(auto x:a) cout<<x<<" ";cout<<endl;
 #define printarr(a , n) for(int i = 0 ; i < n  ;i ++) cout << a[i] << " "; cout << endl;
-
+#define endl '\n'
 #define sq(a) (a)*(a)
 #define yes  cout << "YES" << endl;
 #define no  cout << "NO" << endl;
@@ -39,9 +40,37 @@ using namespace __gnu_pbds;
   
 #define ordered_set tree<int, null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update>
 #define inf 1e18
+
+
 /*
 	order_of_key(x) -> number of elements strictly smaller than x
 	find_by_order(k) -> kth element 
+
+	---------------------------------------------
+	Think reverse -> graph problems
+	Try converting into new operation
+	check what happens to prefix sums
+	graph trav , scc , topo , floyd ,  .... 
+	copy code check
+	index bounds
+	maxsz
+	set low , up bound be carefull
+*/
+
+/*
+
+    ----------------------------------------------------------------------
+	-------------- GO THROUGH CODE ONCE BEFORE SUBMITTING ----------------
+    ----------------------------------------------------------------------
+
+    ----------------------------------------------------------------------
+	-------------- TLE : INFINITE LOOP , TIGHT CONSTRAINTS ---------------
+	-------------- MLE : WIERD CONSTRAINT ARRAY SIZE       ---------------
+	-------------- RE : POP EMPTY STACK QUEUE, INDEX BOUNDS --------------
+    ----------------------------------------------------------------------
+
+    Things get better by time, hope for the best ......
+    
 */
 
 void solve(){
@@ -70,11 +99,12 @@ int main(){
 	#endif
 
 	int t;cin>>t; while(t--)
-    
     solve();
 	
 	return 0;
 }
+
+
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
     <tabTrigger>cp</tabTrigger>

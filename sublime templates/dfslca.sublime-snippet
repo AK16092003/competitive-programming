@@ -1,15 +1,37 @@
 <snippet>
 	<content><![CDATA[
 
+
 #define maxsz 200005
 #define logmax 18
 
 vector<lli> adjlst[maxsz];
+vector<pll> adj[maxsz];
 lli parent[maxsz];
 lli level[maxsz];
-lli height[maxsz];
-lli visited[maxsz];
 lli memo[maxsz][logmax];
+
+struct node 
+{
+	lli val;
+};
+
+struct node empty_node = {0};
+struct node calc[maxsz][logmax];
+
+
+struct node merge(struct node p1 , struct node p2)
+{
+	struct node nn;
+	nn.val = max(p1.val , p2.val);
+	return nn;
+}
+
+
+struct node reverse(struct node p1)
+{
+	return p1;
+}
 
 void preprocess(lli n)
 {
@@ -17,56 +39,90 @@ void preprocess(lli n)
 	{
 		for(lli j = 0 ; j <= n ; j ++)
 		{
-			if(i == 0) memo[j][i] = parent[j];
+			if(i == 0) 
+			{
+				memo[j][i] = parent[j];
+			}
 			else{
 				memo[j][i] = memo[memo[j][i-1]][i-1];
 			}
 		}
 	}
+
+	for(lli i = 1 ; i < logmax ; i ++)
+	{
+		for(lli j = 0 ; j <= n ; j ++)
+		{
+			calc[j][i] = merge(calc[j][i-1],calc[memo[j][i-1]][i-1]);
+		}
+	}
 }
 
-lli lca(lli  u , lli v)
+void initialize(int i , int v)
+{
+	calc[i][0].val = v;
+}
+
+struct node lca(lli  u , lli v)
 {
 	if(level[u] > level[v])
 	{
 		swap(u , v);
 	}		
+	struct node p1 = empty_node , p2 = empty_node;
+
 	for(int i = logmax-1 ; i>=0 ; i--)
 	{
 		if(level[v] - pow(2 , i) >= level[u])
 		{
+			p2 = merge(p2 , calc[v][i]);
 			v = memo[v][i];
 		}
 	}
-	//cout << u << " " << v << endl;
-	if(u == v)
-	{
-		return u;
-	}
+
 
 	for(int i = logmax-1 ; i >= 0 ; i --)
 	{
 		if(memo[u][i] != memo[v][i])
 		{
+			p1 = merge(p1 , calc[u][i]);
+			p2 = merge(p2 , calc[v][i]);
 			u = memo[u][i];
 			v = memo[v][i];
 		}
 	}
-	//cout << u << " "<<v << endl;
-	return memo[u][0];
+	
+
+	if(u != v)
+	{
+		p1 = merge(p1 , calc[u][0]);
+		p2 = merge(p2 , calc[v][0]);
+		u = memo[u][0];
+		v = memo[v][0];
+	}
+
+
+//	p1 = merge(p1 , calc[u][0]);
+	p2 = reverse(p2);
+
+	return merge(p1 , p2);
 }
 
-lli dfs(lli u  , lli p , lli lev)
+void dfs(lli u  , lli p , lli lev)
 {
 	parent[u] = p;
 	level[u] = lev;
 	for(lli v : adjlst[u])
 	{
 		if(v!=p)
-		height[u] = max(height[u] , 1 + dfs(v , u , lev+1));
+		{
+			dfs(v , u , lev+1);
+		}
 	}
-	return height[u];
 }
+
+
+
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>dfslca</tabTrigger>
