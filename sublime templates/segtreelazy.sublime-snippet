@@ -86,7 +86,7 @@ struct segtree
 		set( i , 0 , 0 , size);
 	}
  
-	void range_update(int l , int r ,int v, int x , int lx , int rx)
+	void range_update(int l , int r ,lli v, int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return ;
 		propagation(x , lx , rx);
@@ -108,7 +108,7 @@ struct segtree
 		operations[x] = merge(operations[2*x+1] , operations[2*x+2]);
  
 	}
-	void range_update(int l , int r , int v)
+	void range_update(int l , int r , lli v)
 	{
 		range_update(l , r  , v, 0 , 0 , size);
 	}
