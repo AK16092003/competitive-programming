@@ -1,3 +1,5 @@
+// forgot to memoize it
+
 /*
 	calculate sum of digits from 1 to n
 	
