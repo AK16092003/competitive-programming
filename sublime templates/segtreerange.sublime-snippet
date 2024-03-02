@@ -5,7 +5,7 @@ struct segtree
 {
 	int size;
 	vl sums;
-	lli defval = 0;
+	ll defval = 0;
 
 	void init(int n)
 	{

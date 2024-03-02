@@ -11,13 +11,13 @@ int orientation(pt a, pt b, pt c) {
     return 0;
 }
 
-bool cw(pt a, pt b, pt c, bool include_collinear) {
+bool cw(pt a, pt b, pt c, bool include_collnear) {
     int o = orientation(a, b, c);
-    return o < 0 || (include_collinear && o == 0);
+    return o < 0 || (include_collnear && o == 0);
 }
-bool collinear(pt a, pt b, pt c) { return orientation(a, b, c) == 0; }
+bool collnear(pt a, pt b, pt c) { return orientation(a, b, c) == 0; }
 
-void convex_hull(vector<pt>& a, bool include_collinear = false) {
+void convex_hull(vector<pt>& a, bool include_collnear = false) {
     pt p0 = *min_element(a.begin(), a.end(), [](pt a, pt b) {
         return make_pair(a.y, a.x) < make_pair(b.y, b.x);
     });
@@ -28,15 +28,15 @@ void convex_hull(vector<pt>& a, bool include_collinear = false) {
                 < (p0.x-b.x)*(p0.x-b.x) + (p0.y-b.y)*(p0.y-b.y);
         return o < 0;
     });
-    if (include_collinear) {
+    if (include_collnear) {
         int i = (int)a.size()-1;
-        while (i >= 0 && collinear(p0, a[i], a.back())) i--;
+        while (i >= 0 && collnear(p0, a[i], a.back())) i--;
         reverse(a.begin()+i+1, a.end());
     }
 
     vector<pt> st;
     for (int i = 0; i < (int)a.size(); i++) {
-        while (st.size() > 1 && !cw(st[st.size()-2], st.back(), a[i], include_collinear))
+        while (st.size() > 1 && !cw(st[st.size()-2], st.back(), a[i], include_collnear))
             st.pop_back();
         st.push_back(a[i]);
     }

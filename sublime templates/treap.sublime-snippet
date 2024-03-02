@@ -1,0 +1,153 @@
+<snippet>
+	<content><![CDATA[
+typedef struct item * pitem;
+struct item {
+    int prior, value, cnt;
+    int mini = 1e9;
+    bool rev;
+    pitem l, r;
+};
+ 
+pitem root = nullptr;
+ 
+int cnt (pitem it) {
+    return it ? it->cnt : 0;
+}
+ 
+void upd_cnt (pitem it) {
+    if (it)
+    {
+        it->cnt = cnt(it->l) + cnt(it->r) + 1;
+    }
+}
+ 
+int mini (pitem it) {
+    return it ? it->mini : 1e9;
+}
+ 
+void upd_mini (pitem it) {
+    if(it)
+    {
+        it->mini = min(it->value , min(mini(it->l) , mini(it->r)));
+    }
+}
+ 
+void push (pitem it) {
+    if (it && it->rev) {
+        it->rev = false;
+        swap (it->l, it->r);
+        if (it->l)  it->l->rev ^= true;
+        if (it->r)  it->r->rev ^= true;
+    }
+}
+ 
+void merge (pitem & t, pitem l, pitem r) {
+    push (l);
+    push (r);
+    upd_mini(t);
+    upd_mini(l);
+    upd_mini(r);
+ 
+    if ((!l) || (!r))
+        t = l ? l : r;
+    else if (l->prior > r->prior)
+        merge (l->r, l->r, r),  t = l;
+    else
+        merge (r->l, l, r->l),  t = r;
+    upd_cnt (t);
+    upd_mini(t);
+    upd_mini(l);
+    upd_mini(r);
+}
+ 
+void split (pitem t, pitem & l, pitem & r, int key, int add = 0) {
+    upd_mini(t);
+    upd_mini(l);
+    upd_mini(r);
+ 
+    if (!t)
+    {
+        l = nullptr;
+        r = nullptr;
+        return ;
+    }
+ 
+    push (t);
+    int cur_key = add + cnt(t->l);
+ 
+    if (key <= cur_key)
+        split (t->l, l, t->l, key, add),  r = t;
+    else
+        split (t->r, t->r, r, key, add + 1 + cnt(t->l)),  l = t;
+    
+    upd_cnt (t);
+    upd_mini(t);
+    upd_mini(l);
+    upd_mini(r);
+}
+ 
+void reverse (pitem t, int l, int r) {
+    pitem t1 = nullptr, t2 = nullptr, t3 = nullptr;
+    split (t, t1, t2, l);
+    split (t2, t2, t3, r-l+1);
+    t2->rev ^= true;
+    merge (t, t1, t2);
+    merge (t, t, t3);
+}
+ 
+void output (pitem t) {
+    if (!t)  return;
+    push (t);
+    output (t->l);
+    cout << t->value << " " ;
+    output (t->r);
+}
+ 
+void insert(int v , int p)
+{
+    pitem t1=nullptr , t2=nullptr;
+ 
+    pitem newitem = new item;
+    newitem->value = v;
+    newitem->prior = rand(1,1e9);
+    newitem->cnt = 1;
+    newitem->rev = false;
+    newitem->l = nullptr;
+    newitem->r = nullptr;
+    newitem->mini = v;
+ 
+    split(root , t1 , t2 , p);
+    merge(t1 , t1 , newitem);
+    merge(root , t1 , t2);
+}
+ 
+ 
+int search_idx(pitem cur, int v)
+{
+    push (cur);
+    if(cur->value == v)
+    {
+        cur->value = 1e9;
+        upd_cnt(cur);
+        upd_mini(cur);
+        return cnt(cur->l);
+    }
+    if(mini(cur->l) == v)
+    {
+        return search_idx(cur->l , v);
+    }
+    else
+    {
+        return search_idx(cur->r , v)  +  cnt(cur->l) + 1;
+    }
+    upd_cnt(cur);
+    upd_mini(cur);
+}
+ 
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>treap</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

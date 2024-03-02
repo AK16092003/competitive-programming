@@ -1,10 +1,10 @@
 <snippet>
 	<content><![CDATA[
-		lli count_coprime(int a , int n)
+		ll count_coprime(int a , int n)
 {
 	// count of numbers from 1 to n coprime to a
-	vector<lli> fact;
-	lli cur = 2;
+	vector<ll> fact;
+	ll cur = 2;
 
 	while(cur*cur <= a)
 	{
@@ -20,12 +20,12 @@
 	if(a!=1)fact.pb(a);
 
 
-	lli n1 = fact.size();
-	lli ans = n;
+	ll n1 = fact.size();
+	ll ans = n;
 	for(int i = 1; i < (1<<n1) ; i ++)
 	{
-		lli pro = 1;
-		lli count = 0;
+		ll pro = 1;
+		ll count = 0;
 		for(int j = 0 ; j < n1 ; j ++)
 		{
 			if(i&(1 << j))

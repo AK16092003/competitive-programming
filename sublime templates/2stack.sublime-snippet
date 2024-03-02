@@ -4,14 +4,14 @@
 class stackop
 {
 	public:
-		stack <lli> s1,s1g,s2,s2g;
+		stack <ll> s1,s1g,s2,s2g;
 		
-		lli operation(lli x , lli y)
+		ll operation(ll x , ll y)
 		{
 			return min(x , y);
 		}
 
-		void add(lli x)
+		void add(ll x)
 		{
 			s2.push(x);
 			if(s2.size() == 1)
@@ -32,9 +32,9 @@ class stackop
 			}
 		}
 
-		lli fake_remove()
+		ll fake_remove()
 		{
-			lli g = 0;
+			ll g = 0;
 
 			if(s1.size() == 1)
 			{
@@ -43,7 +43,7 @@ class stackop
 			}
 			else
 			{
-				lli t = s1g.top();
+				ll t = s1g.top();
 				s1g.pop();
 				if(s2g.size())
 					g = operation(s2g.top() , s1g.top());
@@ -54,7 +54,7 @@ class stackop
 			return g;
 		}
 
-		lli curval()
+		ll curval()
 		{
 			if(s1.size() == 0 && s2.size())
 			{

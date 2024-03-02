@@ -11,15 +11,15 @@ void add(int idx)
 
 }
  
-lli get_answer()
+ll get_answer()
 {
 	return ans;
 }
  
-lli BLOCK_SIZE = 700;
+ll BLOCK_SIZE = 700;
  
 struct Query {
-    lli l, r, idx;
+    ll l, r, idx;
     bool operator<(Query other) const
     {
     	    if (l / BLOCK_SIZE != other.l / BLOCK_SIZE)
@@ -30,7 +30,7 @@ struct Query {
  
 vl mo_s_algorithm(vector<Query> queries) {
  
-    vector<lli> answers(queries.size());
+    vector<ll> answers(queries.size());
     sort(queries.begin(), queries.end());
  
     int cur_l = 0;

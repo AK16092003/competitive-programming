@@ -9,7 +9,7 @@ string s;
 pll p = {31,53};
 pll inv_p = {129032259 , 56603774};
 pll inv_p_1 = {233333335 , 788461544};
-lli mod = 1e9+7;
+ll mod = 1e9+7;
 vpll hash_array(SZ);
 pll powerval[SZ];
 
@@ -36,9 +36,9 @@ vpll calchash(string &s)
 	return hash_array;
 }
 
-pll hashval(lli l , lli r)
+pll hashval(ll l , ll r)
 {
-	lli len = r - l + 1;
+	ll len = r - l + 1;
 	if(len <= 0 || l < 0 || r >= n || r<l) return {0,0};
 	pll ans = hash_array[r];
 	if(l >= 1)

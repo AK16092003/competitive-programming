@@ -1,10 +1,10 @@
 <snippet>
 	<content><![CDATA[
-				
+		
 struct node
 {
-	lli add;
-	lli maxi;
+	ll add;
+	ll val;
 };
  
  
@@ -13,8 +13,9 @@ struct segtree
 	int size;
 	vector<struct node> operations;
  
-	struct node defval = {0ll ,0ll};
+	struct node defval = {0ll , 0ll};
 		
+ 
 	void init(int n)
 	{
 		size = 1;
@@ -22,20 +23,17 @@ struct segtree
 		operations.assign(2*size , defval);
 	}
 
- 	struct node merge(struct node p1 , struct node p2)
- 	{
- 		struct node merge_node = defval;
- 		// operation heress
- 		merge_node.maxi = max(p1.maxi , p2.maxi);
- 		return merge_node;
- 	}
- 
+	ll calc(ll x , ll y)
+	{
+		return x + y;
+	}
  
 	struct node apply_operation(struct node x , struct node y)
 	{
 		struct node res = x;
 		// y is parent , res is child
-		res.add += y.add;
+
+
 		return res;
 	}
  
@@ -44,9 +42,6 @@ struct segtree
 		if(rx - lx == 1) 
 		{
 			// relax all lazy operations
-
-			operations[x].maxi += operations[x].add;
-			operations[x].add = 0;
 			return;
 		}
 		else
@@ -56,40 +51,42 @@ struct segtree
 			
 			// relax all lazy operations
 
-			operations[x].maxi += operations[x].add;
-			operations[x].add = 0;
 
 		}
 	}
  
-	void set(int i , lli v, int x , int lx , int rx)
+	struct node get(int i , int x , int lx , int rx)
 	{
 		propagation(x , lx , rx);
 		if(rx - lx == 1)
 		{
-			operations[x].maxi = v;
-			return;
+			return operations[x];
 		}
 		int m = (lx + rx)/2;
  
+		struct node res;
+ 
 		if(i < m)
 		{
-			set(i, v ,2*x+1 , lx , m);
+			res =  get(i,2*x+1 , lx , m);
 		}
 		else{
-			set(i, v ,2*x+2 , m , rx);
+			res =  get(i,2*x+2 , m , rx);
 		}
- 	}
  
-	void set(int i , lli v)
-	{
-		set( i , v , 0 , 0 , size);
+		return res;
 	}
  
-	void range_update(int l , int r ,lli v, int x , int lx , int rx)
+	ll get(int i)
 	{
-		propagation(x , lx , rx);
+		struct node ans = get( i , 0 , 0 , size);
+		return ans.val;
+	}
+ 
+	void range_update(int l , int r ,ll v, int x , int lx , int rx)
+	{
 		if(lx >= r || l >= rx) return ;
+		propagation(x , lx , rx);
  
 		if(l <= lx && r >= rx)
 		{
@@ -105,22 +102,22 @@ struct segtree
 		propagation(2*x+1 , lx , m);
 		propagation(2*x+2 , m , rx);
 
-		operations[x] = merge(operations[2*x+1] , operations[2*x+2]);
+		operations[x].val = calc(operations[2*x+1].val , operations[2*x+2].val);
  
 	}
-	void range_update(int l , int r , lli v)
+	void range_update(int l , int r , ll v)
 	{
 		range_update(l , r  , v, 0 , 0 , size);
 	}
  
-	struct node range_calc(int l , int r , int x , int lx , int rx)
+	ll range_calc(int l , int r , int x , int lx , int rx)
 	{
 		propagation(x , lx , rx);
-		if(lx >= r || l >= rx) return {0 , (lli)-inf};
+		if(lx >= r || l >= rx) return LLONG_MAX;
  
 		if(l <= lx && r >= rx)
 		{
-			return operations[x];
+			return operations[x].val;
 		}
  
 		int m = (lx + rx)/2;
@@ -129,14 +126,14 @@ struct segtree
 		propagation(2*x+1 , lx , m);
 		propagation(2*x+2 , m , rx);
 
-		operations[x] = merge(operations[2*x+1] , operations[2*x+2]);
+		operations[x].val = calc(operations[2*x+1].val , operations[2*x+2].val);
 
-		return merge(range_calc(l , r , 2*x+1 , lx , m) , range_calc(l , r , 2*x+2 , m , rx));
+		return calc(range_calc(l , r , 2*x+1 , lx , m) , range_calc(l , r , 2*x+2 , m , rx));
 	}
  
-	lli range_calc(int l , int r)
+	ll range_calc(int l , int r)
 	{
-		return range_calc(l , r , 0 , 0 , size).maxi;
+		return range_calc(l , r , 0 , 0 , size);
 	}
  
 };

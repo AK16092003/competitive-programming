@@ -1,18 +1,18 @@
 <snippet>
 	<content><![CDATA[
-lli mod = 1e9 + 7;
+ll mod = 1e9 + 7;
 int sz = 1000005;
-lli fact[1000005];
-lli ifact[1000005];
+ll fact[1000005];
+ll ifact[1000005];
  
  
-lli power(lli x, lli n)   //x base n exponent
+ll power(ll x, ll n)   //x base n exponent
 {
     if(n==0) return 1;
     x = x%mod;
     if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
     n = n%(mod-1);
-    lli pow = 1;
+    ll pow = 1;
     while (n)
     {
         if (n & 1)
@@ -23,7 +23,7 @@ lli power(lli x, lli n)   //x base n exponent
     return pow;
 }
  
-lli inv_mod(lli x)
+ll inv_mod(ll x)
 {
 	return power(x , mod - 2)%mod;
 }
@@ -47,7 +47,7 @@ void factorial()
 	}
 }
  
-lli ncr(lli n , lli r)
+ll ncr(ll n , ll r)
 {
 	if(n<r || r<0) return 0;
 	if(r == 0) return 1;

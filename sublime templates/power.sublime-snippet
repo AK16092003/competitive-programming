@@ -1,12 +1,12 @@
 <snippet>
 	<content><![CDATA[
 
-lli power(lli x, lli n , lli mod)   //x base n exponent
+ll power(ll x, ll n , ll mod)   //x base n exponent
 {
     if(n==0) return 1;
     x = x%mod;
     if(x%mod==0) return 0;   //For large N,%mod- > mod is prime
-    lli pow = 1;
+    ll pow = 1;
     while (n)
     {
         if (n & 1)
@@ -16,10 +16,10 @@ lli power(lli x, lli n , lli mod)   //x base n exponent
     }
     return pow;
 }
-lli imod(lli n , lli mod)
+ll imod(ll n , ll mod)
 {
     if(n == 1) return 1;
-    return (mod - (lli)(mod/n) * imod(mod%n , mod) % mod) % mod;
+    return (mod - (ll)(mod/n) * imod(mod%n , mod) % mod) % mod;
 }
 
 ]]></content>

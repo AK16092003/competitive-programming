@@ -4,7 +4,7 @@ struct segtree
 {
 	int size;
 	vl sums;
-	lli defval = 0;
+	ll defval = 0;
 
 	void init(int n)
 	{
@@ -13,7 +13,7 @@ struct segtree
 		sums.assign(2*size , defval);
 	}
 
-	void set(int i , lli v , int x , int  lx , int rx)
+	void set(int i , ll v , int x , int  lx , int rx)
 	{
 		if(rx  - lx == 1)
 		{
@@ -33,20 +33,20 @@ struct segtree
 		sums[x] = sums[2*x+1] + sums[2*x+2];
 
 	}
-	void set(int i , lli v)
+	void set(int i , ll v)
 	{
 		set(i , v, 0 , 0 , size);
 	}
-	lli sum(int l , int r , int x , int lx , int rx)
+	ll sum(int l , int r , int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return defval;
 		if(l <= lx && r >= rx) return sums[x];
 		int m = (lx + rx)/2;
-		lli s1 = sum(l , r , 2*x+1 , lx , m);
-		lli s2 = sum(l , r , 2*x+2 , m , rx);
+		ll s1 = sum(l , r , 2*x+1 , lx , m);
+		ll s2 = sum(l , r , 2*x+2 , m , rx);
 		return s1 + s2;
 	}
-	lli sum(int l , int r)
+	ll sum(int l , int r)
 	{
 		return sum(l , r , 0 , 0 , size);
 	}

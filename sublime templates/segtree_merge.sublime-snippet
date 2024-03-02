@@ -4,7 +4,7 @@
 
 struct node
 {
-	lli val;
+	ll val;
 };
 
 struct segtree
@@ -29,7 +29,7 @@ struct segtree
 		return merge_node;
 	}
 
-	void set(int i , lli v , int x , int  lx , int rx)
+	void set(int i , ll v , int x , int  lx , int rx)
 	{
 		if(rx  - lx == 1)
 		{
@@ -50,7 +50,7 @@ struct segtree
 		values[x] = merge(values[2*x+1] , values[2*x+2]);
 	}
 
-	void set(int i , lli v)
+	void set(int i , ll v)
 	{
 		set(i , v, 0 , 0 , size);
 	}
@@ -66,7 +66,7 @@ struct segtree
 		
 		return merge(s1 , s2);
 	}
-	lli range_calc(int l , int r)
+	ll range_calc(int l , int r)
 	{
 		return range_calc(l , r , 0 , 0 , size).val;
 	}
@@ -82,7 +82,7 @@ struct segtree
 		return a;
 	}
  
-	vl find_all_index(int l , int r , lli v , int x , int lx , int rx)
+	vl find_all_index(int l , int r , ll v , int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return {};
 		
@@ -100,13 +100,13 @@ struct segtree
 		return combine(find_all_index(l , r , v ,  2*x+1 , lx , m) , find_all_index(l , r , v , 2*x+2 , m , rx));
 	}
  
-	vl find_all_index(int l , int r , lli v)
+	vl find_all_index(int l , int r , ll v)
 	{
 		return find_all_index(l , r ,  v , 0 , 0 , size);
 	}
  	
 
-	int find_first_index(int l , int r , lli v , int x , int lx , int rx)
+	int find_first_index(int l , int r , ll v , int x , int lx , int rx)
 	{
 		if(lx >= r || l >= rx) return -1;
 		
@@ -140,7 +140,7 @@ struct segtree
 		return find_first_index(l , r , v , 2*x+2 , m , rx);
 	}
  
-	int find_first_index(int l , int r , lli v)
+	int find_first_index(int l , int r , ll v)
 	{
 		return find_first_index(l , r ,  v , 0 , 0 , size);
 	}

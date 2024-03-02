@@ -1,10 +1,10 @@
 <snippet>
 	<content><![CDATA[
 
-lli sqrt_num(lli x) {
-    lli l = 1, r = INF;
+ll sqrt_num(ll x) {
+    ll l = 1, r = INF;
     while (r - l > 1) {
-        lli m = (l + r) / 2;
+        ll m = (l + r) / 2;
         if (m * m <= x)
             l = m;
         else

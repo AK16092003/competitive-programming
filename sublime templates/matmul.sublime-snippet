@@ -4,7 +4,7 @@
 #define sz 10
 struct mat
 {
-	lli mat[sz][sz];
+	ll mat[sz][sz];
 };
 
 struct mat basemat;
@@ -40,7 +40,7 @@ void printmat(struct mat a)
 }
 
 
-lli mod = 1e9 + 7;
+ll mod = 1e9 + 7;
 
 struct mat mul(struct mat a , struct mat b)
 {
@@ -60,7 +60,7 @@ struct mat mul(struct mat a , struct mat b)
 	return c;
 }
 
-struct mat power(struct mat x, lli n)   //x base n exponent
+struct mat power(struct mat x, ll n)   //x base n exponent
 {
 	if(n<0) return zeromat;
     if(n==0) return idenmat;

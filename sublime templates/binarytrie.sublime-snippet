@@ -17,7 +17,7 @@ struct node *newnode()
 }
 
 
-void insertdata(lli x)
+void insertdata(ll x)
 {
 	bitset<32> num = bitset<32>(x);
 	
@@ -46,7 +46,7 @@ void insertdata(lli x)
 	curnode->data++;
 }
 
-void deletedata(lli x)
+void deletedata(ll x)
 {
 	bitset<32> num = bitset<32>(x);
 	
@@ -87,11 +87,11 @@ void printdata(struct node *curnode , string s , int p)
 
 }
 
-lli searchdata(lli num)
+ll searchdata(ll num)
 {
 	struct node *curnode = headnode;
 
-	lli ans = 0;
+	ll ans = 0;
 
 	for(int i = 31 ; i >= 0 ; i --)
 	{

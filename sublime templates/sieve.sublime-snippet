@@ -13,7 +13,7 @@ void sieve()
 	{
 		if(stat[i] == 1)
 		{	primes.insert(i);
-			if( (lli)i*i > sz) continue;
+			if( (ll)i*i > sz) continue;
 			for(int j = i*i ; j < sz ; j +=i)	stat[j] = 0;
 		}
 	}

@@ -3,8 +3,8 @@
 
 #define MAXLIM 1005
 
-lli maxflow;
-lli adjflow[MAXLIM][MAXLIM];
+ll maxflow;
+ll adjflow[MAXLIM][MAXLIM];
 int parent[MAXLIM];
 int visited[MAXLIM];
 int n , m;

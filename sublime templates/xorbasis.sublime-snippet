@@ -3,9 +3,9 @@
 
 #define SZ 31
 
-lli basis[SZ]; 
+ll basis[SZ]; 
 
-bool insert_vector(lli mask)
+bool insert_vector(ll mask)
 {
 
 	for(int i = 0 ; i < SZ ; i ++)
